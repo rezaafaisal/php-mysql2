@@ -16,7 +16,6 @@
     while($baris = mysqli_fetch_assoc($hasil)){
         array_push($books, $baris);
     }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +56,7 @@
                             ?>
                                 <tr>
                                     <td><?= $i+1 ?></td>
-                                    <td><?php echo $book['judul']  ?></td>
+                                    <td><?= $book['judul']  ?></td>
                                     <td><?= $book['deskripsi'] ?></td>
                                     <td><?= $book['penulis'] ?></td>
                                     <td><?= $book['tahun_terbit'] ?></td>
