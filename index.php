@@ -1,3 +1,23 @@
+<?php 
+
+    // koneksi database
+    $koneksi = mysqli_connect('localhost', 'root', 'Tenin@123', 'perpustakaan');
+
+    // query untuk mengambil data
+    $query = "SELECT * FROM buku";
+
+    // eksekusi query
+    $hasil = mysqli_query($koneksi, $query);
+
+    // buat array kosong untuk menampung data buku
+    $books = array();
+    
+    // proses pengambilan data
+    while($baris = mysqli_fetch_assoc($hasil)){
+        array_push($books, $baris);
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,13 +50,21 @@
                                 </tr>
                             </thead>
                             <tbody>
+
+                            <?php 
+                                // perulangan data
+                                foreach($books as $i => $book) :
+                            ?>
                                 <tr>
-                                    <td>1</td>
-                                    <td>Kancil</td>
-                                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, totam?</td>
-                                    <td>graham bell</td>
-                                    <td>1997</td>
+                                    <td><?= $i+1 ?></td>
+                                    <td><?php echo $book['judul']  ?></td>
+                                    <td><?= $book['deskripsi'] ?></td>
+                                    <td><?= $book['penulis'] ?></td>
+                                    <td><?= $book['tahun_terbit'] ?></td>
                                 </tr>
+                            <?php 
+                                 endforeach;
+                            ?>
                             </tbody>
                         </table>
                     </div>
