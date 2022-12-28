@@ -6,11 +6,12 @@
         insert($_POST);
     }
 
+    if(isset($_POST['update'])){
+        update_data($_POST);
+    }
 
 
 
-
-    
     // koneksi database
     $koneksi = mysqli_connect('localhost', 'root', 'Tenin@123', 'perpustakaan');
 
@@ -58,6 +59,21 @@
                 </script>
             ";
         } 
+        if(isset($_GET['update_success'])){
+            echo "
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Buku berhasil diupdate'
+                    }).then((e) => {
+                        if(e.isConfirmed){
+                            window.location.href = 'index.php';
+                        }
+                    });
+                </script>
+            ";
+        } 
     ?>
   <div class="container">
     <div class="mt-5 row justify-content-center">
@@ -95,7 +111,8 @@
                   <td><?= $book['tahun_terbit'] ?></td>
                   <td>
                     <div class="d-flex gap-3">
-                      <a href="" class="btn btn-sm btn-primary">Edit</a>
+                      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal_edit"
+                      onclick='updateForm(JSON.stringify(<?php echo json_encode($book); ?>))'>Edit</button>
                       <a href="" class="btn btn-sm btn-danger">Hapus</a>
                     </div>
                   </td>
@@ -157,6 +174,52 @@
       </div>
     </div>
   </div>
+
+  <!-- modal edit -->
+   <div class="modal fade" id="modal_edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Update Buku</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form_update" action="" method="POST">
+            <input type="hidden" name="update">
+            <input type="hidden" id="id" name="id">
+            <div class="mb-3">
+              <label for="judul" class="form-label">Judul Buku</label>
+              <input type="text" name="judul" class="form-control" id="judul" placeholder="Masukkan judul buku">
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="penulis" class="form-label">Penulis</label>
+                  <input type="text" name="penulis" class="form-control" id="penulis"
+                    placeholder="Masukkan nama penulis buku">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="tahun_terbit" class="form-label">Tahun Terbit</label>
+                  <input type="year" name="tahun_terbit" class="form-control" id="tahun_terbit"
+                    placeholder="Masukkan tahun terbit buku">
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="deskripsi" class="form-label">Deskripsi Buku</label>
+              <textarea name="deskripsi" class="form-control" id="deskripsi" rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button id="submit_form_update" type="button" class="btn btn-primary">Simpan Perubahan</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
     integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -166,6 +229,20 @@
     $('#submit_form').click(()=>{
         form.submit();
     })
+
+    $('#submit_form_update').click(function(){
+        $('#form_update').submit();
+    })
+
+    function updateForm(data){
+        const book = JSON.parse(data);
+        const form = '#form_update';
+        $(form +' #id').val(book.id);
+        $(form +' #judul').val(book.judul);
+        $(form +' #penulis').val(book.penulis);
+        $(form +' #tahun_terbit').val(book.tahun_terbit);
+        $(form +' #deskripsi').val(book.deskripsi);
+    }
 </script>
 
 </body>
