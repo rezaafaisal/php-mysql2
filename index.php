@@ -10,6 +10,10 @@
         update_data($_POST);
     }
 
+    if(isset($_GET['id'])){
+      delete_data($_GET['id']);
+    }
+
 
 
     // koneksi database
@@ -100,9 +104,9 @@
               <tbody>
 
                 <?php 
-                                // perulangan data
-                                foreach($books as $i => $book) :
-                            ?>
+                    // perulangan data
+                    foreach($books as $i => $book) :
+                ?>
                 <tr>
                   <td><?= $i+1 ?></td>
                   <td><?= $book['judul']  ?></td>
@@ -113,7 +117,7 @@
                     <div class="d-flex gap-3">
                       <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal_edit"
                       onclick='updateForm(JSON.stringify(<?php echo json_encode($book); ?>))'>Edit</button>
-                      <a href="" class="btn btn-sm btn-danger">Hapus</a>
+                        <button onclick="deleteData()" class="btn btn-sm btn-danger">Hapus</button>
                     </div>
                   </td>
                 </tr>
@@ -128,6 +132,9 @@
     </div>
   </div>
 
+<form id="form_delete" action="" method="post">
+  <input type="hidden" name="id">
+</form>
 
   <!-- modal input -->
   <!-- Modal -->
@@ -242,6 +249,26 @@
         $(form +' #penulis').val(book.penulis);
         $(form +' #tahun_terbit').val(book.tahun_terbit);
         $(form +' #deskripsi').val(book.deskripsi);
+    }
+
+    function deleteData(){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
+        }
+      })
     }
 </script>
 

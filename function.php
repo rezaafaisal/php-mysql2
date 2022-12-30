@@ -32,4 +32,10 @@
             header("location:index.php?update_success");
         }
     }
+
+    function delete_data($id){
+        $query = "DELETE FROM buku WHERE id = '$id'";
+        global $koneksi;
+        mysqli_query($koneksi, $query);
+    }
 ?>
