@@ -37,5 +37,9 @@
         $query = "DELETE FROM buku WHERE id = '$id'";
         global $koneksi;
         mysqli_query($koneksi, $query);
+
+        if(mysqli_affected_rows($koneksi) > 0){
+            header("location: index.php?delete_success");
+        }
     }
 ?>

@@ -10,8 +10,8 @@
         update_data($_POST);
     }
 
-    if(isset($_GET['id'])){
-      delete_data($_GET['id']);
+    if(isset($_POST['id'])){
+      delete_data($_POST['id']);
     }
 
 
@@ -78,6 +78,21 @@
                 </script>
             ";
         } 
+        if(isset($_GET['delete_success'])){
+            echo "
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Buku berhasil dhapus'
+                    }).then((e) => {
+                        if(e.isConfirmed){
+                            window.location.href = 'index.php';
+                        }
+                    });
+                </script>
+            ";
+        } 
     ?>
   <div class="container">
     <div class="mt-5 row justify-content-center">
@@ -117,7 +132,7 @@
                     <div class="d-flex gap-3">
                       <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal_edit"
                       onclick='updateForm(JSON.stringify(<?php echo json_encode($book); ?>))'>Edit</button>
-                        <button onclick="deleteData()" class="btn btn-sm btn-danger">Hapus</button>
+                        <button onclick="deleteData('<?= $book['id'] ?>')" class="btn btn-sm btn-danger">Hapus</button>
                     </div>
                   </td>
                 </tr>
@@ -251,22 +266,20 @@
         $(form +' #deskripsi').val(book.deskripsi);
     }
 
-    function deleteData(){
+    function deleteData(id){
+      $('#form_delete input').val(id);
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Yakin Hapus?',
+        text: "Data akan dihapus secara permanen!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Hapus',
+        cancelButtonText: 'Batal',
       }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )
+          $('#form_delete').submit()
         }
       })
     }
